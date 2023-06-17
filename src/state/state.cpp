@@ -5,7 +5,6 @@
 #include "./state.hpp"
 #include "../config.hpp"
 
-
 /**
  * @brief evaluate the state
  * 
@@ -13,7 +12,71 @@
  */
 int State::evaluate(){
   // [TODO] design your own evaluation function
-  return 0;
+  int pl1=0, pl2=0;
+  for(int i = 0; i<2; i++)
+  {
+    for(int j = 0; j<BOARD_H; j++)
+    {
+      for(int k = 0; k<BOARD_W; k++)
+      {
+        if(i == 0)
+        {
+          if(this->board.board[i][j][k] == '1' || this->board.board[i][j][k] == 1)
+          {
+            pl1 += 2;
+          }
+          if(this->board.board[i][j][k] == '2' || this->board.board[i][j][k] == 2)
+          {
+            pl1 += 6;
+          }
+          if(this->board.board[i][j][k] == '3' || this->board.board[i][j][k] == 3)
+          {
+            pl1 += 7;
+          }
+          if(this->board.board[i][j][k] == '4' || this->board.board[i][j][k] == 4)
+          {
+            pl1 += 8;
+          }
+          if(this->board.board[i][j][k] == '5' || this->board.board[i][j][k] == 5)
+          {
+            pl1 += 20;
+          }
+          if(this->board.board[i][j][k] == '6' || this->board.board[i][j][k] == 6)
+          {
+            pl1 += 100;
+          }
+        }
+        else
+        {
+          if(this->board.board[i][j][k] == '1' || this->board.board[i][j][k] == 1)
+          {
+            pl2 += 2;
+          }
+          if(this->board.board[i][j][k] == '2' || this->board.board[i][j][k] == 2)
+          {
+            pl2 += 6;
+          }
+          if(this->board.board[i][j][k] == '3' || this->board.board[i][j][k] == 3)
+          {
+            pl2 += 7;
+          }
+          if(this->board.board[i][j][k] == '4' || this->board.board[i][j][k] == 4)
+          {
+            pl2 += 8;
+          }
+          if(this->board.board[i][j][k] == '5' || this->board.board[i][j][k] == 5)
+          {
+            pl2 += 20;
+          }
+          if(this->board.board[i][j][k] == '6' || this->board.board[i][j][k] == 6)
+          {
+            pl2 += 100;
+          } 
+        }
+      }
+    }
+  }
+  return pl1 - pl2;
 }
 
 
@@ -207,7 +270,7 @@ void State::get_legal_actions(){
       }
     }
   }
-  std::cout << "\n";
+  //std::cout << "\n";
   this->legal_actions = all_actions;
 }
 
@@ -237,7 +300,7 @@ std::string State::encode_output(){
     }
     ss << "\n";
   }
-  return ss.str();
+  return ss.str();  
 }
 
 

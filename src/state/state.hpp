@@ -46,8 +46,10 @@ class State{
     GameState game_state = UNKNOWN;
     Board board;
     int player = 0;
+    int score = -1000000000;
     std::vector<Move> legal_actions;
-    
+    Move ret;
+
     State(){};
     State(int player): player(player){};
     State(Board board): board(board){};
