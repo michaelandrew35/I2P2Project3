@@ -1,9 +1,9 @@
 #include <cstdlib>
 #include <algorithm>
 #include "../state/state.hpp"
-#include "./minimax.hpp"
+#include "./alphabeta.hpp"
 
-int evalTree(State *state, int depth, int maximizing)
+int evaltree(State *state, int depth, int alpha, int beta, int maximizing)
 {
   if(!state->legal_actions.size()) state->get_legal_actions();
   if(depth == 0 || !state->legal_actions.size())
@@ -16,13 +16,18 @@ int evalTree(State *state, int depth, int maximizing)
     for(auto it = state->legal_actions.begin(); it != state->legal_actions.end(); it++)
     {
       State* temp = state->next_state(*it);
-      int val = evalTree(temp, depth-1, 0);
+      int val = evaltree(temp, depth-1, alpha, beta, 0);
       if(val > value)
       {
         value = val;
         state->ret = *it;
         state->score = value;
       }
+      if(value > alpha)
+      {
+        alpha = value;
+      }
+      if(alpha > beta) break;
     }
     return value;
   }
@@ -32,13 +37,18 @@ int evalTree(State *state, int depth, int maximizing)
     for(auto it = state->legal_actions.begin(); it != state->legal_actions.end(); it++)
     {
       State* temp = state->next_state(*it);
-      int val = evalTree(temp, depth-1, 1);
+      int val = evaltree(temp, depth-1, alpha, beta, 1);
       if(val < value)
       {
         value = val;
         state->ret = *it;
         state->score = value;
       }
+      if(value < beta)
+      {
+        beta = value;
+      }
+      if(beta < alpha) break;
     }
     return value;
   }
@@ -52,8 +62,8 @@ int evalTree(State *state, int depth, int maximizing)
  * @param depth You may need this for other policy
  * @return Move 
  */
-Move MiniMax::get_move(State *state, int depth)
+Move AlphaBeta::get_move(State *state, int depth)
 {  
-  evalTree(state, depth, 1-state->player);
+  evaltree(state, depth, -1000000000, 1000000000, 1-state->player);
   return state->ret;
 }
