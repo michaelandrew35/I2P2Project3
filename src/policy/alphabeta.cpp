@@ -16,16 +16,19 @@ int evaltree(State *state, int depth, int alpha, int beta, int maximizing)
     for(auto it = state->legal_actions.begin(); it != state->legal_actions.end(); it++)
     {
       State* temp = state->next_state(*it);
+      temp->player = !temp->player;
+      if(!temp->legal_actions.size()) temp->get_legal_actions();
+      if(temp->game_state == WIN) continue;
+      else temp->player = !temp->player;
       int val = evaltree(temp, depth-1, alpha, beta, 0);
       if(val > value)
       {
         value = val;
-        state->ret = *it;
-        state->score = value;
       }
       if(value > alpha)
       {
         alpha = value;
+        state->ret = *it;
       }
       if(alpha > beta) break;
     }
@@ -37,16 +40,19 @@ int evaltree(State *state, int depth, int alpha, int beta, int maximizing)
     for(auto it = state->legal_actions.begin(); it != state->legal_actions.end(); it++)
     {
       State* temp = state->next_state(*it);
+      temp->player = !temp->player;
+      if(!temp->legal_actions.size()) temp->get_legal_actions();
+      if(temp->game_state == WIN) continue;
+      else temp->player = !temp->player;
       int val = evaltree(temp, depth-1, alpha, beta, 1);
       if(val < value)
       {
         value = val;
-        state->ret = *it;
-        state->score = value;
       }
       if(value < beta)
       {
         beta = value;
+        state->ret = *it;
       }
       if(beta < alpha) break;
     }
