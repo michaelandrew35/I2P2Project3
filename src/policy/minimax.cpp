@@ -16,12 +16,15 @@ int evalTree(State *state, int depth, int maximizing)
     for(auto it = state->legal_actions.begin(); it != state->legal_actions.end(); it++)
     {
       State* temp = state->next_state(*it);
+      temp->player = !temp->player;
+      if(!temp->legal_actions.size()) temp->get_legal_actions();
+      if(temp->game_state == WIN) continue;
+      else temp->player = !temp->player;
       int val = evalTree(temp, depth-1, 0);
       if(val > value)
       {
         value = val;
         state->ret = *it;
-        state->score = value;
       }
     }
     return value;
@@ -32,12 +35,15 @@ int evalTree(State *state, int depth, int maximizing)
     for(auto it = state->legal_actions.begin(); it != state->legal_actions.end(); it++)
     {
       State* temp = state->next_state(*it);
+      temp->player = !temp->player;
+      if(!temp->legal_actions.size()) temp->get_legal_actions();
+      if(temp->game_state == WIN) continue;
+      else temp->player = !temp->player;
       int val = evalTree(temp, depth-1, 1);
-      if(val < value)
+      if(val <value)
       {
         value = val;
         state->ret = *it;
-        state->score = value;
       }
     }
     return value;
